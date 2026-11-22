@@ -19,7 +19,7 @@ split in `../battery-split-plan.md` (2026-11-22, the user's option A): the analy
 - Live entry **«Монітор батареї»** `01M82D23HPDCS81QC02YWR3DVZ`: charge `sensor.vkhidna_zona_deye_inverter_battery`,
   power `…_battery_power`, 15 kWh, floor `number.vkhidna_zona_deye_inverter_battery_shutdown_soc`. Entities
   `sensor.monitor_batarei_time_left` / `_state` / `_session` / `_time_to_full` / `_measured_capacity`. Runs alongside
-  grid_load_shedding's own `sensor.merezha_battery_*` to compare for a day (first minutes: 520 vs 449 min, its 45-min
+  grid_load_shedding's own `sensor.merezha_battery_*` (removed in its v0.12.0 the same evening) to compare (first minutes: 520 vs 449 min, its 45-min
   average had just started; an hour later 492 vs 457). The dashboard «Інвертор» uses these since 2026-11-22 (plan step 3).
 - Same conventions as `../grid-load-shedding/`: personal project, Marketplace custom repository, hassfest + pytest CI,
   bump `manifest.json` `version` per release. The brand icon is a copy of grid_load_shedding's for now.
