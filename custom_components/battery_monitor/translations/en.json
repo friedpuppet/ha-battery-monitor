@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Battery Monitor",
+        "data": {
+          "name": "Name",
+          "soc_entity": "Charge",
+          "power_entity": "Power",
+          "capacity": "Capacity",
+          "floor_entity": "Floor"
+        },
+        "data_description": {
+          "soc_entity": "Any sensor with a charge in percent.",
+          "power_entity": "Optional. Battery power in W or kW, positive while discharging. Adds the state, session, time to full and measured capacity, and the time left comes from the power instead of how fast the percentage falls.",
+          "capacity": "Energy of the full battery (0–100 %), needed with the power.",
+          "floor_entity": "Optional. An entity with the charge in % the battery is discharged to, e.g. the inverter's shutdown SOC. The time left counts down to it; while it has no number the last known one is used, 0 % without one."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This charge sensor is already monitored."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "soc_entity": "Charge",
+          "power_entity": "Power",
+          "capacity": "Capacity",
+          "floor_entity": "Floor"
+        },
+        "data_description": {
+          "soc_entity": "Any sensor with a charge in percent.",
+          "power_entity": "Optional. Battery power in W or kW, positive while discharging. Adds the state, session, time to full and measured capacity, and the time left comes from the power instead of how fast the percentage falls.",
+          "capacity": "Energy of the full battery (0–100 %), needed with the power.",
+          "floor_entity": "Optional. An entity with the charge in % the battery is discharged to, e.g. the inverter's shutdown SOC. The time left counts down to it; while it has no number the last known one is used, 0 % without one."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "runtime": {
+        "name": "Time left"
+      },
+      "time_to_full": {
+        "name": "Time to full"
+      },
+      "state": {
+        "name": "State",
+        "state": {
+          "discharging": "Discharging",
+          "charging": "Charging",
+          "idle": "Idle"
+        }
+      },
+      "session": {
+        "name": "Session"
+      },
+      "measured_capacity": {
+        "name": "Measured capacity"
+      }
+    }
+  }
+}
