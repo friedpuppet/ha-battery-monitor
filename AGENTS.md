@@ -8,11 +8,19 @@ split in `../battery-split-plan.md` (2026-11-22, the user's option A): the analy
 
 ## Status
 
-- v0.1.0 written 2026-11-22, tests green (`uv run pytest`, PHCC pinned = HA 2026.8.3). Not published yet: the GitHub
-  repo `friedpuppet/ha-battery-monitor` doesn't exist (the PAT has no Administration, the user creates repos).
-- Planned live entry «Батарея»: charge `sensor.vkhidna_zona_deye_inverter_battery`, power `…_battery_power`, 15 kWh,
-  floor `number.vkhidna_zona_deye_inverter_battery_shutdown_soc`; runs alongside grid_load_shedding's own battery
-  sensors (`sensor.merezha_battery_*`) for a day to compare, then the dashboard moves over.
+- **v0.1.0 released and live 2026-11-22.** Repo **[friedpuppet/ha-battery-monitor](https://github.com/friedpuppet/ha-battery-monitor)**
+  (public, created by the user), `origin` without credentials. Push with the PAT `~/.config/github/token-grid-load-shedding`
+  (the user added this repo to it): `git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$(cat ~/.config/github/token-grid-load-shedding)" | base64 -w0)" push`.
+  Releases via the GitHub API with the same PAT.
+- Marketplace custom repository, repo id **`1467925568`** (added with WS `marketplace/repositories/add`,
+  `repository: "friedpuppet/ha-battery-monitor"`, `category: "integration"`). Update: bump version, push, release,
+  WS `marketplace/repository/install` `repository: "1467925568"`, `version: "vX.Y.Z"`, restart Core. The first
+  install needed no restart.
+- Live entry **«Монітор батареї»** `01M82D23HPDCS81QC02YWR3DVZ`: charge `sensor.vkhidna_zona_deye_inverter_battery`,
+  power `…_battery_power`, 15 kWh, floor `number.vkhidna_zona_deye_inverter_battery_shutdown_soc`. Entities
+  `sensor.monitor_batarei_time_left` / `_state` / `_session` / `_time_to_full` / `_measured_capacity`. Runs alongside
+  grid_load_shedding's own `sensor.merezha_battery_*` to compare for a day (first minutes: 520 vs 449 min, its 45-min
+  average had just started), then the dashboard moves over (plan step 3).
 - Same conventions as `../grid-load-shedding/`: personal project, Marketplace custom repository, hassfest + pytest CI,
   bump `manifest.json` `version` per release. The brand icon is a copy of grid_load_shedding's for now.
 
