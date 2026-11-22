@@ -8,7 +8,8 @@ split in `../battery-split-plan.md` (2026-11-22, the user's option A): the analy
 
 ## Status
 
-- **v0.1.0 released and live 2026-11-22.** Repo **[friedpuppet/ha-battery-monitor](https://github.com/friedpuppet/ha-battery-monitor)**
+- **v0.1.1 released and live 2026-11-22** (the flows refuse a power sensor without a capacity, error
+  `capacity_missing`; v0.1.0 the same day: the first release). Repo **[friedpuppet/ha-battery-monitor](https://github.com/friedpuppet/ha-battery-monitor)**
   (public, created by the user), `origin` without credentials. Push with the PAT `~/.config/github/token-grid-load-shedding`
   (the user added this repo to it): `git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$(cat ~/.config/github/token-grid-load-shedding)" | base64 -w0)" push`.
   Releases via the GitHub API with the same PAT.
@@ -18,11 +19,11 @@ split in `../battery-split-plan.md` (2026-11-22, the user's option A): the analy
   install needed no restart.
 - Live entry **«Монітор батареї»** `01M82D23HPDCS81QC02YWR3DVZ`: charge `sensor.vkhidna_zona_deye_inverter_battery`,
   power `…_battery_power`, 15 kWh, floor `number.vkhidna_zona_deye_inverter_battery_shutdown_soc`. Entities
-  `sensor.monitor_batarei_time_left` / `_state` / `_session` / `_time_to_full` / `_measured_capacity`. Runs alongside
-  grid_load_shedding's own `sensor.merezha_battery_*` (removed in its v0.12.0 the same evening) to compare (first minutes: 520 vs 449 min, its 45-min
-  average had just started; an hour later 492 vs 457). The dashboard «Інвертор» uses these since 2026-11-22 (plan step 3).
+  `sensor.monitor_batarei_time_left` / `_state` / `_session` / `_time_to_full` / `_measured_capacity`. It was
+  compared with grid_load_shedding's old `sensor.merezha_battery_*` before those were removed in its v0.12.0 the same
+  evening (first minutes: 520 vs 449 min, its 45-min average had just started; an hour later 492 vs 457). The dashboard «Інвертор» uses these since 2026-11-22 (plan step 3).
 - Same conventions as `../grid-load-shedding/`: personal project, Marketplace custom repository, hassfest + pytest CI,
-  bump `manifest.json` `version` per release. The brand icon is a copy of grid_load_shedding's for now.
+  bump both `manifest.json` and `pyproject.toml` `version` per release. The brand icon is a copy of grid_load_shedding's for now.
 
 ## Rules (the user's, 2026-11-22)
 
@@ -39,6 +40,7 @@ split in `../battery-split-plan.md` (2026-11-22, the user's option A): the analy
 |---|---|
 | `custom_components/battery_monitor/monitor.py` | `BatteryMonitor` (state machine, sessions, `PowerSmoother`, rate segments, persisted in `Store` `battery_monitor.<entry_id>`). No entities, unit-testable. |
 | `.../sensor.py` | The five sensors on the entry's service device. |
-| `.../config_flow.py` | User flow (name + options), options flow (reloads the entry). |
+| `.../config_flow.py` | User flow (name + options), options flow (reloads the entry); both require the capacity with a power sensor. |
 | `tests/test_power.py` | State, hysteresis, sessions, smoothing, time left / to full, capacity, reload, fallback. |
 | `tests/test_rate.py` | The percentage rate without power. |
+| `tests/test_config_flow.py` | User and options flows, the capacity check. |

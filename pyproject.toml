@@ -1,6 +1,6 @@
 [project]
 name = "ha-battery-monitor"
-version = "0.1.0"
+version = "0.1.1"
 description = "Home Assistant integration: battery state, sessions, time left and time to full"
 requires-python = ">=3.14.2"
 

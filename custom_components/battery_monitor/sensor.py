@@ -13,6 +13,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from . import BatteryMonitorConfigEntry
 from .const import DOMAIN
+from .monitor import CHARGING, DISCHARGING, IDLE
 from .monitor import BATTERY_STATES, CHARGING, DISCHARGING, BatteryMonitor
 
 
@@ -122,9 +123,9 @@ class StateSensor(_MonitorEntity):
     @property
     def icon(self) -> str:
         return {
-            "discharging": "mdi:battery-arrow-down",
-            "charging": "mdi:battery-charging",
-            "idle": "mdi:battery-outline",
+            DISCHARGING: "mdi:battery-arrow-down",
+            CHARGING: "mdi:battery-charging",
+            IDLE: "mdi:battery-outline",
         }.get(self._monitor.state or "", "mdi:battery-unknown")
 
     @property

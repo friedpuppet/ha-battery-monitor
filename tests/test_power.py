@@ -14,7 +14,7 @@ from .conftest import CAPACITY, FLOOR, POWER, RUNTIME, SESSION, SOC, STATE, TO_F
 BATTERY = SOC
 
 
-def expected(soc: float, power: float, floor: float = 5, capacity: float = 16) -> float:
+def expected(soc: float, power: float, floor: float = 5, capacity: float = 15) -> float:
     return (soc - floor) / 100 * capacity * 1000 / power * 60
 
 
@@ -102,7 +102,7 @@ async def test_steady_load(hass: HomeAssistant, freezer: FrozenDateTimeFactory) 
 async def test_time_to_full(hass: HomeAssistant, freezer: FrozenDateTimeFactory) -> None:
     await setup(hass, soc=60, watts=-1000)
     await run(hass, freezer, 30, -1000)
-    assert float(hass.states.get(TO_FULL).state) == pytest.approx(40 / 100 * 16 * 60, rel=0.01)
+    assert float(hass.states.get(TO_FULL).state) == pytest.approx(40 / 100 * 15 * 60, rel=0.01)
     assert hass.states.get(RUNTIME).state == "unknown"
 
 

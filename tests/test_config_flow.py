@@ -32,6 +32,23 @@ async def test_user_flow(hass: HomeAssistant) -> None:
     assert result["type"] is FlowResultType.ABORT and result["reason"] == "already_configured"
 
 
+async def test_power_needs_the_capacity(hass: HomeAssistant) -> None:
+    hass.states.async_set(SOC, "80", {"device_class": "battery"})
+    result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": SOURCE_USER})
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"name": "Батарея", CONF_SOC_ENTITY: SOC, CONF_POWER_ENTITY: POWER}
+    )
+    assert result["type"] is FlowResultType.FORM and result["errors"] == {"base": "capacity_missing"}
+
+    entry = make_entry(power=False)
+    await setup_entry(hass, entry)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"], {CONF_SOC_ENTITY: SOC, CONF_POWER_ENTITY: POWER}
+    )
+    assert result["type"] is FlowResultType.FORM and result["errors"] == {"base": "capacity_missing"}
+
+
 async def test_options_flow_reloads(hass: HomeAssistant) -> None:
     hass.states.async_set(SOC, "80")
     hass.states.async_set(FLOOR, "15")

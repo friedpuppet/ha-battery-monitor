@@ -19,6 +19,11 @@ def _suggested(defaults: dict[str, Any], key: str) -> dict | None:
     return {"suggested_value": defaults[key]} if defaults.get(key) else None
 
 
+def _errors(user_input: dict[str, Any]) -> dict[str, str]:
+    """The power is used only together with the capacity: without one the power sensors would silently not appear."""
+    return {"base": "capacity_missing"} if user_input.get(CONF_POWER_ENTITY) and not user_input.get(CONF_CAPACITY) else {}
+
+
 def _options_schema(defaults: dict[str, Any]) -> vol.Schema:
     return vol.Schema(
         {
@@ -46,14 +51,17 @@ class BatteryMonitorConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        errors: dict[str, str] = {}
         if user_input is not None:
             self._async_abort_entries_match({CONF_SOC_ENTITY: user_input[CONF_SOC_ENTITY]})
-            name = user_input.pop(CONF_NAME)
-            return self.async_create_entry(title=name, data={}, options=user_input)
-        schema = vol.Schema({vol.Required(CONF_NAME, default="Battery"): selector.TextSelector()}).extend(
-            _options_schema({}).schema
-        )
-        return self.async_show_form(step_id="user", data_schema=schema)
+            if not (errors := _errors(user_input)):
+                name = user_input.pop(CONF_NAME)
+                return self.async_create_entry(title=name, data={}, options=user_input)
+        defaults = user_input or {}
+        schema = vol.Schema(
+            {vol.Required(CONF_NAME, default=defaults.get(CONF_NAME, "Battery")): selector.TextSelector()}
+        ).extend(_options_schema(defaults).schema)
+        return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
 
     @staticmethod
     @callback
@@ -65,6 +73,8 @@ class BatteryMonitorOptionsFlow(OptionsFlow):
     """Change the entities and the capacity (the entry reloads afterwards)."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        if user_input is not None:
+        errors: dict[str, str] = {}
+        if user_input is not None and not (errors := _errors(user_input)):
             return self.async_create_entry(data=user_input)
-        return self.async_show_form(step_id="init", data_schema=_options_schema(dict(self.config_entry.options)))
+        defaults = user_input if user_input is not None else dict(self.config_entry.options)
+        return self.async_show_form(step_id="init", data_schema=_options_schema(defaults), errors=errors)

@@ -8,7 +8,7 @@ the entities picked in its options.
 
 - **Charge**: any sensor with a charge in percent (required).
 - **Power** (optional): battery power in W or kW, positive while discharging.
-- **Capacity** (kWh of the full battery, 0–100 %): needed with the power.
+- **Capacity** (kWh of the full battery, 0–100 %): needed with the power (the flows refuse a power sensor without it).
 - **Floor** (optional): an entity with the charge in % the battery is discharged to, e.g. an inverter's shutdown SOC.
   The time left counts down to it; while it has no number the last known one is used, 0 % if there never was one.
 

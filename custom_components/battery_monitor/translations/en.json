@@ -18,6 +18,9 @@
         }
       }
     },
+    "error": {
+      "capacity_missing": "Set the capacity: the power is used only together with it."
+    },
     "abort": {
       "already_configured": "This charge sensor is already monitored."
     }
@@ -38,6 +41,9 @@
           "floor_entity": "Optional. An entity with the charge in % the battery is discharged to, e.g. the inverter's shutdown SOC. The time left counts down to it; while it has no number the last known one is used, 0 % without one."
         }
       }
+    },
+    "error": {
+      "capacity_missing": "Set the capacity: the power is used only together with it."
     }
   },
   "entity": {

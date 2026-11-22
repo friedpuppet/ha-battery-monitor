@@ -40,7 +40,7 @@ def make_entry(power: bool = True, **options: Any) -> MockConfigEntry:
         options={
             CONF_SOC_ENTITY: SOC,
             CONF_FLOOR_ENTITY: FLOOR,
-            **({CONF_POWER_ENTITY: POWER, CONF_CAPACITY: 16} if power else {}),
+            **({CONF_POWER_ENTITY: POWER, CONF_CAPACITY: 15} if power else {}),
             **options,
         },
     )
